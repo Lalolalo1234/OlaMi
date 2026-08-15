@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="OLM - Observatorio Latinoamericano de la Minería, impulsado por OLAMI">
+    <title>OLM - Observatorio Latinoamericano de la Minería</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .tagline {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .badge-relacion {
+            display: inline-block;
+            margin-top: 0.8rem;
+            font-size: 0.8rem;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+        }
+
+        /* Navegación */
+        nav {
+            background: white;
+            border-bottom: 1px solid #ddd;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0;
+            list-style: none;
+        }
+
+        .nav-menu li {
+            flex: 1;
+            min-width: 140px;
+        }
+
+        .nav-menu button {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            background: none;
+            color: #333;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .nav-menu button:hover {
+            background: #f0f0f0;
+            color: #1e3c72;
+        }
+
+        .nav-menu button.active {
+            color: #2a5298;
+            border-bottom-color: #2a5298;
+            background: #f8f9fa;
+        }
+
+        /* Container principal */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
+            min-height: calc(100vh - 300px);
+        }
+
+        /* Contenido de pestañas */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tab-content h1 {
+            color: #1e3c72;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            border-bottom: 3px solid #2a5298;
+            padding-bottom: 1rem;
+        }
+
+        .tab-content h2 {
+            color: #2a5298;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .tab-content p {
+            margin-bottom: 1rem;
+            text-align: justify;
+            line-height: 1.8;
+        }
+
+        .subsection {
+            background: white;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid #2a5298;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .subsection h3 {
+            color: #1e3c72;
+            margin-bottom: 0.8rem;
+        }
+
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Tabla comparativa */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            margin: 1.5rem 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        table th {
+            background: #1e3c72;
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        table td {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            vertical-align: top;
+        }
+
+        table tr:hover {
+            background: #f8f9fa;
+        }
+
+        /* Pilares / cards */
+        .pillar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .pillar-card {
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            overflow: hidden;
+            border-top: 4px solid #2a5298;
+        }
+
+        .pillar-card .pillar-number {
+            background: #1e3c72;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            font-weight: bold;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+        }
+
+        .pillar-card .pillar-body {
+            padding: 1.2rem;
+        }
+
+        .pillar-card h4 {
+            color: #1e3c72;
+            margin-bottom: 0.6rem;
+            font-size: 1.05rem;
+        }
+
+        /* Flujo Measure/Anticipate/Guide */
+        .flow-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .flow-step {
+            background: white;
+            border-radius: 6px;
+            padding: 1.2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            position: relative;
+        }
+
+        .flow-step .flow-tag {
+            display: inline-block;
+            background: #2a5298;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 0.2rem 0.6rem;
+            border-radius: 3px;
+            margin-bottom: 0.6rem;
+            letter-spacing: 0.05em;
+        }
+
+        /* Checklist de fases */
+        .phase {
+            background: white;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border-left: 4px solid #2a5298;
+        }
+
+        .phase h3 {
+            color: #1e3c72;
+            margin-bottom: 0.3rem;
+        }
+
+        .phase .phase-meta {
+            color: #777;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .checklist {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .checklist li {
+            padding-left: 1.8rem;
+            position: relative;
+            margin-bottom: 0.7rem;
+        }
+
+        .checklist li::before {
+            content: "☐";
+            position: absolute;
+            left: 0;
+            color: #2a5298;
+            font-size: 1.1rem;
+        }
+
+        .value-list {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .value-list li {
+            padding-left: 1.8rem;
+            position: relative;
+            margin-bottom: 0.7rem;
+        }
+
+        .value-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #2a9d5c;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        /* Nodos nacionales */
+        .node-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .node-card {
+            background: white;
+            border-radius: 6px;
+            padding: 1.2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            border-top: 3px solid #2a5298;
+        }
+
+        .node-card.existing {
+            border-top-color: #2a9d5c;
+        }
+
+        .node-card .node-status {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: bold;
+            padding: 0.15rem 0.5rem;
+            border-radius: 3px;
+            background: #e3f2fd;
+            color: #1e3c72;
+            margin-top: 0.5rem;
+        }
+
+        .node-card.existing .node-status {
+            background: #e6f7ec;
+            color: #217a45;
+        }
+
+        /* Footer */
+        footer {
+            background: #1e3c72;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-content p {
+            margin: 0.5rem 0;
+        }
+
+        .footer-links {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a {
+            color: #a0d4ff;
+            text-decoration: none;
+            margin: 0 1rem;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                font-size: 0.85rem;
+            }
+
+            .nav-menu li {
+                min-width: 100px;
+            }
+
+            .nav-menu button {
+                padding: 0.8rem 0.5rem;
+            }
+
+            .tab-content h1 {
+                font-size: 1.5rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+        }
+
+        .alert {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .quote-block {
+            background: #eef4ff;
+            border-left: 4px solid #1e3c72;
+            padding: 1.2rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+            font-style: italic;
+            color: #1e3c72;
+        }
+
+        .button-group {
+            margin: 2rem 0;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            background: #2a5298;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #1e3c72;
+        }
+
+        .btn-secondary {
+            background: #666;
+        }
+
+        .btn-secondary:hover {
+            background: #333;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo">🌎 OLM · Observatorio Latinoamericano de la Minería</div>
+            <div class="tagline">Una iniciativa de OLAMI — midiendo demanda global, anticipando oferta regional, guiando decisión estratégica</div>
+            <div class="badge-relacion">Evolución regional del modelo CeProMin (Argentina)</div>
+        </div>
+    </header>
+
+    <!-- Navegación -->
+    <nav>
+        <div class="nav-container">
+            <ul class="nav-menu">
+                <li><button class="nav-btn active" data-tab="inicio">Inicio</button></li>
+                <li><button class="nav-btn" data-tab="demanda">Demanda Global</button></li>
+                <li><button class="nav-btn" data-tab="oferta">Oferta &amp; Competitividad</button></li>
+                <li><button class="nav-btn" data-tab="capital-humano">Capital Humano</button></li>
+                <li><button class="nav-btn" data-tab="indicadores">Indicadores</button></li>
+                <li><button class="nav-btn" data-tab="gobernanza">Gobernanza</button></li>
+                <li><button class="nav-btn" data-tab="hoja-de-ruta">Hoja de Ruta</button></li>
+                <li><button class="nav-btn" data-tab="acerca">Acerca del OLM</button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <div class="container">
+        <!-- Inicio -->
+        <div id="inicio" class="tab-content active">
+            <h1>El Observatorio Latinoamericano de la Minería</h1>
+            <p>El OLM es la propuesta de OLAMI para escalar a nivel regional el modelo de <strong>"minería orientada a la demanda"</strong> que <strong>CeProMin</strong> ya opera de forma pionera en Argentina. Toma la arquitectura institucional del Observatorio de Ingeniería de España (gobernanza multi-actor, datos + narrativa, indicadores estructurados) y la aplica al desafío específico de América Latina: conectar la demanda global de minerales críticos con la capacidad de oferta de la región.</p>
+
+            <div class="quote-block">
+                "Ser el centro de referencia para traducir demanda global de minerales críticos en decisiones estratégicas de inversión, política y capacidades en América Latina; medir demanda a 2030-2050, anticipar oferta regional, y guiar ejecución coordinada de gobiernos, universidades y sector privado."
+            </div>
+
+            <h2>El ciclo estratégico: Measure → Anticipate → Guide</h2>
+            <div class="flow-grid">
+                <div class="flow-step">
+                    <span class="flow-tag">MEASURE</span>
+                    <p>Cuantificar la demanda global 2030/2040/2050 de Cu, Li, REE, W, Be y otros minerales críticos, desglosada por mercado final, con escenarios base/high/low y elasticidad de precio.</p>
+                </div>
+                <div class="flow-step">
+                    <span class="flow-tag">ANTICIPATE</span>
+                    <p>Proyectar la oferta latinoamericana (capacidad de producción, tiempos de desarrollo, limitantes) e identificar los "strategic gaps": la brecha entre lo que el mundo demanda y lo que la región puede producir.</p>
+                </div>
+                <div class="flow-step">
+                    <span class="flow-tag">GUIDE</span>
+                    <p>Traducir esas señales de mercado en decisiones de política (regulación, incentivos), inversión (qué proyectos priorizar) y ejecución (coordinación federal, capacidades).</p>
+                </div>
+            </div>
+
+            <h2>Tres clusters de demanda</h2>
+            <div class="pillar-grid">
+                <div class="pillar-card">
+                    <div class="pillar-number">ELECTRIFICATION</div>
+                    <div class="pillar-body">
+                        <h4>Transición Energética</h4>
+                        <p>Cu, Li, Ni, Co, REE para baterías y renovables. Driver: neutralidad de carbono 2050 (UE, China, EE.UU.).</p>
+                    </div>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-number">TECHNOLOGY &amp; DEFENSE</div>
+                    <div class="pillar-body">
+                        <h4>Semiconductores, IA y Defensa</h4>
+                        <p>Ga, Ge, InP, Ta para chips avanzados. Driver: hegemonía tecnológica (EE.UU. vs. China).</p>
+                    </div>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-number">FUSION ENERGY</div>
+                    <div class="pillar-body">
+                        <h4>Energía de Fusión</h4>
+                        <p>W, Be, Li-6 para reactores de fusión. Driver: viabilidad comercial de la fusión (2030s-2040s). El OLM monitorea proyectos como TokaMind/TokaMark (IA aplicada a plasma).</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert">
+                <strong>Nota:</strong> Este contenido adapta y amplía el modelo ya validado por CeProMin (Argentina) a escala regional. Es un sitio independiente del de CeProMin — todavía no están integrados.
+            </div>
+
+            <div class="button-group">
+                <button class="btn" onclick="navigateTo('demanda')">Ver Demanda Global</button>
+                <button class="btn btn-secondary" onclick="navigateTo('gobernanza')">Ver Gobernanza</button>
+            </div>
+        </div>
+
+        <!-- Demanda Global (Measure) -->
+        <div id="demanda" class="tab-content">
+            <h1>Demanda Global de Minerales Críticos 2030-2050</h1>
+            <p><strong>Pilar 1</strong> del OLM: informe anual con proyecciones de Cu, Li, Ni, Co, REE, W, Be, Ga, Ge, InP y Ta, bajo escenarios base/high/low, con análisis de elasticidad de precio e impacto de sustitución tecnológica.</p>
+
+            <div class="subsection">
+                <h3>Electrification — Transición Energética</h3>
+                <p>Cobre, litio, níquel, cobalto y tierras raras para baterías y energías renovables. El driver de fondo es el compromiso de neutralidad de carbono a 2050 asumido por la UE, China y EE.UU., que sostiene una curva de demanda estructuralmente creciente para estos minerales durante las próximas tres décadas.</p>
+            </div>
+
+            <div class="subsection">
+                <h3>Technology &amp; Defense — Semiconductores, IA y Defensa</h3>
+                <p>Galio, germanio, fosfuro de indio y tantalio para chips avanzados. El driver es geopolítico: la disputa por la hegemonía tecnológica entre EE.UU. y China convierte a estos insumos en material estratégico, con alta sensibilidad a restricciones de exportación y políticas de "friend-shoring".</p>
+            </div>
+
+            <div class="subsection">
+                <h3>Fusion Energy — Innovación Energética</h3>
+                <p>Tungsteno, berilio y litio-6 para reactores de fusión nuclear. El driver es la viabilidad comercial de la fusión en el horizonte 2030s-2040s. El OLM da seguimiento a iniciativas como TokaMind y TokaMark, que aplican inteligencia artificial al control de plasma, como indicador temprano de aceleración de esta demanda.</p>
+            </div>
+
+            <h2>El "Measure Gap" que el OLM cierra</h2>
+            <p>Hoy existen múltiples fuentes de proyección de demanda (IEA, S&amp;P, Wood Mackenzie, USGS, Adamas) que con frecuencia se contradicen entre sí. El OLM centraliza y armoniza estas fuentes —sumando datos directos de empresas mineras de la región— para producir una proyección de referencia única para América Latina.</p>
+
+            <div class="subsection">
+                <h3>Fuentes de datos</h3>
+                <p>IEA · S&amp;P Global · Wood Mackenzie · USGS · Adamas Intelligence · reportes directos de empresas mineras de la región.</p>
+            </div>
+        </div>
+
+        <!-- Oferta y Competitividad (Anticipate) -->
+        <div id="oferta" class="tab-content">
+            <h1>Oferta Regional y Competitividad Minera Latinoamericana</h1>
+            <p><strong>Pilar 2</strong> del OLM: ranking regional de países por costo de producción frente al mercado global, velocidad de scale-up de proyectos, estabilidad regulatoria, capacidades técnicas e índice ESG, con benchmark contra Australia, Canadá e Indonesia.</p>
+
+            <div class="subsection">
+                <h3>El "Anticipate Gap"</h3>
+                <p>Hoy no existe un observatorio unificado que confronte la oferta regional con la demanda global proyectada. Cada país —Perú, Chile, Argentina— realiza su propio análisis en silos, sin una lectura comparada que permita identificar dónde la región es competitiva y dónde escasea capacidad de producción frente a lo que el mundo va a necesitar.</p>
+            </div>
+
+            <div class="subsection">
+                <h3>Mapa de vulnerabilidades</h3>
+                <p>El OLM produce un mapeo explícito de vulnerabilidades: qué minerales críticos muestran riesgo de escasez de oferta regional hacia 2030-2050, y en qué geografías y condiciones América Latina tiene ventaja competitiva real para cerrar esa brecha.</p>
+            </div>
+
+            <h2>Benchmark internacional</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>País / Bloque</th>
+                        <th>Rol en el benchmark</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Australia</td><td>Referencia de estabilidad regulatoria y velocidad de scale-up de proyectos.</td></tr>
+                    <tr><td>Canadá</td><td>Referencia de marco de inversión y capacidades técnicas.</td></tr>
+                    <tr><td>Indonesia</td><td>Referencia de política de valor agregado y control de recursos estratégicos.</td></tr>
+                    <tr><td>Perú, Chile, Argentina, Colombia</td><td>Nodos nacionales del OLM — objeto central del ranking regional.</td></tr>
+                </tbody>
+            </table>
+
+            <div class="alert">
+                <strong>Nota:</strong> El contenido detallado por país (costos unitarios, CAPEX, índice ESG) se construye a partir de las encuestas y entrevistas del ciclo bienal de investigación del OLM (ver pestaña Gobernanza).
+            </div>
+        </div>
+
+        <!-- Capital Humano y Política (Guide) -->
+        <div id="capital-humano" class="tab-content">
+            <h1>Capital Humano &amp; Política Minera</h1>
+            <p><strong>Pilar 3</strong> del OLM: stock de profesionales mineros por país y especialidad, brecha de talento, sueldos comparados, oferta de formación disponible y política regulatoria necesaria para retener talento y atraer inversión.</p>
+
+            <div class="subsection">
+                <h3>Stock de talento</h3>
+                <p>Capital humano minero por país (ingenieros, geólogos) y su distribución por especialidad, como base para identificar dónde la región tiene déficit de capacidades técnicas frente a la escala de inversión proyectada.</p>
+            </div>
+
+            <div class="subsection">
+                <h3>Empleabilidad y brecha de competencias</h3>
+                <p>Empleabilidad en el sector minero, brecha de competencias respecto de lo que demandan los nuevos proyectos, y comparación de sueldos entre países de la región.</p>
+            </div>
+
+            <div class="subsection">
+                <h3>Formación y vocación</h3>
+                <p>Capacidad instalada de formación en carreras mineras, programas especializados emergentes, evolución de matrículas en ingeniería de minas, y atracción de talento femenino e inclusión como eje explícito de seguimiento.</p>
+            </div>
+
+            <div class="subsection">
+                <h3>El "Guide Gap"</h3>
+                <p>Los gobiernos de la región suelen reaccionar a precios históricos en lugar de anticipar. Falta una visión prospectiva que vincule la decisión regulatoria y de formación de talento con las tendencias de demanda proyectadas a 2030-2050. Ese es el vacío que este pilar busca cerrar.</p>
+            </div>
+        </div>
+
+        <!-- Indicadores -->
+        <div id="indicadores" class="tab-content">
+            <h1>Marco de Indicadores Estructurado</h1>
+            <p>El Observatorio de Ingeniería de España define 8 categorías de indicadores para su sector. El OLM adapta este marco a la minería crítica latinoamericana, mapeando cada categoría al gap estratégico de CeProMin que resuelve.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Categoría (OIE)</th>
+                        <th>Adaptación OLM</th>
+                        <th>Cierra el gap</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Stock</td>
+                        <td>Producción actual por mineral y país. Capacidad instalada.</td>
+                        <td>Measure</td>
+                    </tr>
+                    <tr>
+                        <td>Demográfico</td>
+                        <td>Capital humano minero por país (ingenieros, geólogos). Distribución por especialidad.</td>
+                        <td>Guide (talento)</td>
+                    </tr>
+                    <tr>
+                        <td>Laboral</td>
+                        <td>Empleabilidad en sector minero. Brecha de competencias. Sueldos comparados.</td>
+                        <td>Guide (talento)</td>
+                    </tr>
+                    <tr>
+                        <td>Compensación</td>
+                        <td>Costos operacionales unitarios (USD/ton Cu, USD/ton Li). CAPEX por proyecto nuevo.</td>
+                        <td>Anticipate</td>
+                    </tr>
+                    <tr>
+                        <td>Formación</td>
+                        <td>Capacidad de formación en carreras mineras. Programas especializados emergentes.</td>
+                        <td>Guide</td>
+                    </tr>
+                    <tr>
+                        <td>Empresarial</td>
+                        <td>Perfil de operadores (grandes vs. junior). Inversión en I+D. Capacidad de innovación (downstream).</td>
+                        <td>Anticipate</td>
+                    </tr>
+                    <tr>
+                        <td>Prospectivo</td>
+                        <td>Proyecciones de demanda global (2030/2040/2050) por cluster y mineral. Sensibilidad a sustitución tecnológica.</td>
+                        <td>Measure</td>
+                    </tr>
+                    <tr>
+                        <td>Vocacional</td>
+                        <td>Evolución de matrículas en ingeniería de minas. Atracción de talento femenino e inclusión.</td>
+                        <td>Guide</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Gobernanza -->
+        <div id="gobernanza" class="tab-content">
+            <h1>Gobernanza y Estructura Operacional</h1>
+
+            <h2>Gobernanza multi-actor</h2>
+            <p>El Observatorio de Ingeniería Español integra en su Consejo Rector a gobiernos, academia, colegios profesionales y empresas — una arquitectura que rompe silos y crea un lenguaje compartido entre actores que normalmente no dialogan. El OLM aplica esta misma lógica a la minería regional.</p>
+
+            <div class="subsection">
+                <h3>Consejo Rector Regional</h3>
+                <p>Ministerios de Minería de Perú, Chile, Argentina y Colombia + Cámaras Mineras + grandes empresas (Vale, Antamina, Codelco, Barrick) + Universidades Politécnicas + OLAMI, con CEPAL/CAF como observadores.</p>
+            </div>
+
+            <div class="subsection">
+                <h3>Comité Ejecutivo</h3>
+                <p>Dirección + equipo de Datos + equipo de Análisis de Política.</p>
+            </div>
+
+            <div class="subsection">
+                <h3>Consejo Asesor</h3>
+                <p>Empresas, patronales y ONGs de sostenibilidad.</p>
+            </div>
+
+            <h2>Metodología dual: datos + narrativa</h2>
+            <p>El OIE combina encuestas masivas (más de 40.000 respondentes) para obtener números duros, con entrevistas cualitativas a tomadores de decisión para capturar contexto y tendencias. El OLM adapta este método: encuestas a empresas mineras latinoamericanas sobre costos, CAPEX y timeline de proyectos, más entrevistas a CEOs, ministros y académicos. El resultado son proyecciones de demanda y oferta respaldadas simultáneamente por evidencia cuantitativa y cualitativa.</p>
+
+            <h2>Nodos nacionales</h2>
+            <div class="node-grid">
+                <div class="node-card existing">
+                    <strong>Argentina</strong>
+                    <p>Secretaría de Minería + CAM.</p>
+                    <span class="node-status">Base existente: CeProMin</span>
+                </div>
+                <div class="node-card">
+                    <strong>Perú</strong>
+                    <p>Ministerio de Energía y Minas + SNMPE.</p>
+                    <span class="node-status">Por constituir</span>
+                </div>
+                <div class="node-card">
+                    <strong>Chile</strong>
+                    <p>Ministerio de Minería + Consejo Minero.</p>
+                    <span class="node-status">Por constituir</span>
+                </div>
+                <div class="node-card">
+                    <strong>Colombia</strong>
+                    <p>Ministerio de Minas + ACM.</p>
+                    <span class="node-status">Por constituir</span>
+                </div>
+            </div>
+            <p>El Hub regional del OLM se propone en Lima o Buenos Aires.</p>
+
+            <h2>Ciclo de producción de informes</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Frecuencia</th>
+                        <th>Contenido</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Anual (actualización ligera)</td>
+                        <td>Precios actuales, producción anual, cambios regulatorios, novedades de proyectos en desarrollo.</td>
+                    </tr>
+                    <tr>
+                        <td>Bienal (informe completo)</td>
+                        <td>Encuesta regional a 500+ empresas + 200 entrevistas. Proyecciones de demanda 2030/2040/2050. Análisis de capital humano. Riesgos socioambientales y macro-fiscales.</td>
+                    </tr>
+                    <tr>
+                        <td>Ad-hoc (crisis)</td>
+                        <td>Briefings rápidos ante cambios geopolíticos, tecnológicos o de precios que redefinen escenarios.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Hoja de Ruta -->
+        <div id="hoja-de-ruta" class="tab-content">
+            <h1>Hoja de Ruta de Implementación</h1>
+            <p>El mapa de implementación del OLM se organiza en tres fases a lo largo de 12 a 24 meses.</p>
+
+            <div class="phase">
+                <h3>Fase 1 — Diseño &amp; Gobernanza</h3>
+                <div class="phase-meta">Meses 1-6</div>
+                <ul class="checklist">
+                    <li>Acuerdo entre OLAMI y gobiernos regionales para crear el OLM.</li>
+                    <li>Definir el Consejo Rector y la estructura de nodos nacionales.</li>
+                    <li>Asegurar financiamiento (banco de desarrollo, gobiernos, sector privado).</li>
+                    <li>Contratar Director y equipo core (Datos, Política, Comunicación).</li>
+                </ul>
+            </div>
+
+            <div class="phase">
+                <h3>Fase 2 — Piloto de Investigación</h3>
+                <div class="phase-meta">Meses 7-18</div>
+                <ul class="checklist">
+                    <li>Diseñar encuestas, adaptando la metodología del OIE al contexto minero.</li>
+                    <li>Encuestar entre 300 y 500 empresas mineras de América Latina.</li>
+                    <li>Realizar 150+ entrevistas a CEOs, ministros y académicos.</li>
+                    <li>Compilar proyecciones de demanda global (pilar Measure).</li>
+                    <li>Analizar oferta regional frente a demanda (pilar Anticipate).</li>
+                </ul>
+            </div>
+
+            <div class="phase">
+                <h3>Fase 3 — Primer Informe Público</h3>
+                <div class="phase-meta">Meses 18-24</div>
+                <ul class="checklist">
+                    <li>Publicar "OLM 2024-2025: Minería Crítica en América Latina".</li>
+                    <li>Estructurado en 3 pilares: demanda global, competitividad regional, capital humano.</li>
+                    <li>Lanzamiento en PERUMIN o CESCO.</li>
+                    <li>Generar cobertura de medios y posicionamiento ante gobiernos e inversores.</li>
+                </ul>
+            </div>
+
+            <div class="alert">
+                <strong>Objetivo de corto plazo:</strong> acuerdo y financiamiento en 6 meses. Primer informe: entre 18 y 24 meses desde el arranque.
+            </div>
+        </div>
+
+        <!-- Acerca del OLM -->
+        <div id="acerca" class="tab-content">
+            <h1>Acerca del OLM</h1>
+
+            <div class="subsection">
+                <h3>Misión</h3>
+                <p>Ser el centro de referencia para traducir la demanda global de minerales críticos en decisiones estratégicas de inversión, política y capacidades en América Latina: medir demanda a 2030-2050, anticipar oferta regional, y guiar la ejecución coordinada de gobiernos, universidades y sector privado.</p>
+            </div>
+
+            <h2>Valor agregado único del OLM</h2>
+            <ul class="value-list">
+                <li>Primer "Observatorio Latinoamericano de Minería Crítica" — no existe hoy.</li>
+                <li>Integra la lógica de CeProMin (demanda → oferta) a escala regional.</li>
+                <li>Prospectiva de largo plazo (2050) — única fuente de base regional con ese horizonte.</li>
+                <li>Cierra los tres strategic gaps: Measure (demanda), Anticipate (oferta), Guide (política).</li>
+                <li>Legitimidad triple: gobiernos + academia + sector privado.</li>
+                <li>Herramienta de integración regional (OLAMI, UNASUR, mercados comunes).</li>
+            </ul>
+
+            <div class="subsection">
+                <h3>Relación con CeProMin</h3>
+                <p>CeProMin, hoy operando en Argentina, es pionero en el modelo de minería orientada a la demanda. El OLM es su evolución regional escalada: adopta la arquitectura institucional del Observatorio de Ingeniería de España, pero mantiene el ADN estratégico de CeProMin — conectar demanda global con decisiones de oferta regional. El nodo argentino del OLM puede construirse directamente sobre la base ya existente de CeProMin.</p>
+            </div>
+
+            <div class="subsection">
+                <h3>Visión de largo plazo</h3>
+                <p>CeProMin es hoy pionero en Argentina. El OLM, a futuro, aspira a ser el "Intel" de la minería crítica latinoamericana: la fuente que gobiernos, inversores y académicos consultan para entender dónde invertir, qué regular y cómo atraer talento.</p>
+            </div>
+
+            <div class="subsection">
+                <h3>Próximo paso</h3>
+                <p>Presentar la propuesta a OLAMI y a los gobiernos regionales, con el objetivo de cerrar acuerdo y financiamiento en 6 meses, y publicar el primer informe entre los 18 y 24 meses siguientes.</p>
+            </div>
+
+            <div class="subsection">
+                <h3>Versión</h3>
+                <p>Contenido basado en el análisis conceptual "OLM enriquecido con CeProMin" — en desarrollo.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 OLM - Observatorio Latinoamericano de la Minería · Una iniciativa de OLAMI</p>
+            <div class="footer-links">
+                <a href="#" onclick="navigateTo('gobernanza')">Gobernanza</a>
+                <a href="#" onclick="navigateTo('acerca')">Acerca del OLM</a>
+                <a href="#" onclick="navigateTo('hoja-de-ruta')">Hoja de Ruta</a>
+            </div>
+            <p style="margin-top: 1rem; font-size: 0.85rem; opacity: 0.8;">Sitio independiente del de CeProMin — contenido en desarrollo</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navegación entre pestañas
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                navigateTo(tabId);
+            });
+        });
+
+        function navigateTo(tabId) {
+            // Ocultar todas las pestañas
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Desactivar todos los botones
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Mostrar pestaña activa
+            document.getElementById(tabId).classList.add('active');
+
+            // Activar botón correspondiente
+            document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+
+            // Scroll al inicio
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>
